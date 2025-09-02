@@ -1,3 +1,5 @@
+import sun.nio.cs.CharsetMapping;
+
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -17,25 +19,22 @@ public class Main {
             memory.put(num, memory.getOrDefault(num, 0) + 1);
         }
 
-        // Min-heap to keep top k by frequency
-        PriorityQueue<Map.Entry<Integer, Integer>> heap = new PriorityQueue<>(
-                (a, b) -> a.getValue() - b.getValue()
-        );
+        PriorityQueue <Map.Entry<Integer,Integer>> heap = new PriorityQueue<>((a, b) -> Integer.compare(b.getValue(), a.getValue()));
 
-        for (Map.Entry<Integer, Integer> entry : memory.entrySet()) {
-            heap.offer(entry);
-            if (heap.size() > k) {
-                heap.poll(); // remove smallest frequency
-            }
+        for(Map.Entry<Integer , Integer> entry : memory.entrySet()){
+            heap.add(entry);
         }
 
-        // Extract results
-        int[] result = new int[k];
-        for (int i = k - 1; i >= 0; i--) {
-            result[i] = heap.poll().getKey();
+        List <Integer> s = new ArrayList();
+        while(k> 0){
+            s.add(heap.poll().getKey());
+            k--;
         }
 
-        return result;
 
+        int[] o = s.stream().mapToInt(i -> i).toArray();
+
+        System.out.println(Arrays.toString(o));
+        return o;
     }
 }
